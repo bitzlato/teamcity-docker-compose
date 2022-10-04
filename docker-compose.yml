@@ -13,7 +13,7 @@ volumes:
 services:
 
   teamcity:
-    image: jetbrains/teamcity-server:2019.1.4
+    image: jetbrains/teamcity-server:latest
     container_name: teamcity-sa
     volumes:
       - ./volumes/teamcity_server/datadir:/data/teamcity_server/datadir
