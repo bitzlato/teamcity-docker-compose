@@ -1,4 +1,4 @@
-FROM jetbrains/teamcity-agent
+FROM jetbrains/teamcity-agent:latest
 
 USER root
 RUN apt update && apt install -y \
