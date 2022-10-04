@@ -37,6 +37,8 @@ services:
       - /opt/buildagent/temp:/opt/buildagent/temp
     env_file:
       - env
+    dns:
+      - 8.8.8.8
     restart: unless-stopped
     networks:
       - common
@@ -55,6 +57,8 @@ services:
       - /opt/buildagent/temp:/opt/buildagent/temp
     env_file:
       - env
+    dns:
+      - 8.8.8.8
     restart: unless-stopped
     networks:
       - common
@@ -73,10 +77,11 @@ services:
       - /opt/buildagent/temp:/opt/buildagent/temp
     env_file:
       - env
+    dns:
+      - 8.8.8.8
     restart: unless-stopped
     networks:
       - common
-    labels:
       org.label-schema.group: "ci"
 
   teamcity-agent4:
@@ -84,6 +89,9 @@ services:
       context: .
       dockerfile: Dockerfile.agent
     container_name: teamcity-agent-sa4
+    dns:
+      - 8.8.8.8
+    labels:
     volumes:
       - docker_data:/var/lib/docker
       - /var/run/docker.sock:/var/run/docker.sock
