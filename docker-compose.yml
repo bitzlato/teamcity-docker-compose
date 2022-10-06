@@ -30,7 +30,7 @@ x-agent: &agent
 
 services:
   teamcity-server:
-    image: jetbrains/teamcity-server:2019.1.4
+    image: jetbrains/teamcity-server:latest
     user: "0"
     container_name: teamcity-server
     volumes:
