@@ -46,7 +46,7 @@ services:
 
   teamcity-agent1:
     <<: *agent
-    env:
+    environment:
       <<: *agent-env
       AGENT_NAME: agent-1
     volumes:
@@ -57,7 +57,7 @@ services:
 
   teamcity-agent2:
     <<: *agent
-    env:
+    environment:
       <<: *agent-env
       AGENT_NAME: agent-2
     volumes:
@@ -65,10 +65,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./buildagent2/work:/opt/buildagent/work
       - ./buildagent2/temp:/opt/buildagent/temp
-  
+
   teamcity-agent3:
     <<: *agent
-    env:
+    environment:
       <<: *agent-env
       AGENT_NAME: agent-3
     volumes:
