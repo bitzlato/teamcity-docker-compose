@@ -30,8 +30,8 @@ services:
     volumes:
       - docker_data:/var/lib/docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/buildagent/work:/opt/buildagent/work
-      - /opt/buildagent/temp:/opt/buildagent/temp
+      - ./buildagent/work:/opt/buildagent/work
+      - ./buildagent/temp:/opt/buildagent/temp
     env_file:
       - env
     dns:
@@ -42,7 +42,7 @@ services:
     labels:
       org.label-schema.group: "ci"
 
-    postgresql:
+  postgresql:
     image: postgres:latest
     container_name: database
     shm_size: 1g
@@ -57,4 +57,3 @@ services:
       - 5432
     networks:
       - teamcity
-    logging: *default-logging
