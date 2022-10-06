@@ -15,12 +15,13 @@ volumes:
     agent3_temp:
     docker_data:
 
+x-agent-env: &agent-env
+  SERVER_URL: http://teamcity-server:8111
+
 x-agent: &agent
   image: jetbrains/teamcity-agent:latest
   dns:
     - 8.8.8.8
-  env:
-    SERVER_URL: http://teamcity-server:8111
   restart: unless-stopped
   networks:
     - teamcity
@@ -34,7 +35,7 @@ services:
     volumes:
       - teamcity_data:/data/teamcity_server/datadir
     restart: unless-stopped
-    depend_on:
+    depends_on:
       - postgresql
     ports:
       - 8111:8111
@@ -46,6 +47,7 @@ services:
   teamcity-agent1:
     <<: *agent
     env:
+      <<: *agent-env
       AGENT_NAME: agent-1
     volumes:
       - docker_data:/var/lib/docker
@@ -55,6 +57,9 @@ services:
 
   teamcity-agent2:
     <<: *agent
+    env:
+      <<: *agent-env
+      AGENT_NAME: agent-2
     volumes:
       - docker_data:/var/lib/docker
       - /var/run/docker.sock:/var/run/docker.sock
@@ -63,6 +68,9 @@ services:
   
   teamcity-agent3:
     <<: *agent
+    env:
+      <<: *agent-env
+      AGENT_NAME: agent-3
     volumes:
       - docker_data:/var/lib/docker
       - /var/run/docker.sock:/var/run/docker.sock
