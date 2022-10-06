@@ -6,18 +6,36 @@ networks:
 #    external: true
 
 volumes:
-    teamcity_data: {}
-    docker_data: {}
+    teamcity_data:
+    agent1_work:
+    agent2_work:
+    agent3_work:
+    agent1_temp:
+    agent2_temp:
+    agent3_temp:
+    docker_data:
+
+x-agent: &agent
+  image: jetbrains/teamcity-agent:latest
+  dns:
+    - 8.8.8.8
+  env:
+    SERVER_URL: http://teamcity-server:8111
+  restart: unless-stopped
+  networks:
+    - teamcity
+  labels:
+    org.label-schema.group: "ci"
 
 services:
-
-  teamcity:
+  teamcity-server:
     image: jetbrains/teamcity-server:latest
     user: "0"
-    container_name: teamcity-sa
     volumes:
-      - ./volumes/:/data/teamcity_server/datadir
+      - teamcity_data:/data/teamcity_server/datadir
     restart: unless-stopped
+    depend_on:
+      - postgresql
     ports:
       - 8111:8111
     networks:
@@ -26,22 +44,30 @@ services:
       org.label-schema.group: "ci"
 
   teamcity-agent1:
-    image: jetbrains/teamcity-agent:latest
-    container_name: teamcity-agent-sa1
+    <<: *agent
+    env:
+      AGENT_NAME: agent-1
     volumes:
       - docker_data:/var/lib/docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./buildagent/work:/opt/buildagent/work
-      - ./buildagent/temp:/opt/buildagent/temp
-    env_file:
-      - env
-    dns:
-      - 8.8.8.8
-    restart: unless-stopped
-    networks:
-      - teamcity
-    labels:
-      org.label-schema.group: "ci"
+      - agent1_work:/opt/buildagent/work
+      - ./buildagent1/temp:/opt/buildagent/temp
+
+  teamcity-agent2:
+    <<: *agent
+    volumes:
+      - docker_data:/var/lib/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./buildagent2/work:/opt/buildagent/work
+      - ./buildagent2/temp:/opt/buildagent/temp
+  
+  teamcity-agent3:
+    <<: *agent
+    volumes:
+      - docker_data:/var/lib/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./buildagent3/work:/opt/buildagent/work
+      - ./buildagent3/temp:/opt/buildagent/temp
 
   postgresql:
     image: postgres:latest
