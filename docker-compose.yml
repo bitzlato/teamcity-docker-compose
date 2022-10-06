@@ -13,9 +13,11 @@ services:
 
   teamcity:
     image: jetbrains/teamcity-server:latest
+    command: "chown -R 1000:1000 /data/teamcity_server/datadir"
+    entrypoint: "/run-services.sh"
     container_name: teamcity-sa
     volumes:
-      - ./volumes/teamcity_server/datadir:/data/teamcity_server/datadir
+      - ./volumes/:/data/teamcity_server/datadir
     restart: unless-stopped
     expose:
       - 8111
