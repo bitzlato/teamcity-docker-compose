@@ -30,7 +30,7 @@ x-agent: &agent
 
 services:
   teamcity-server:
-    image: jetbrains/teamcity-server:latest
+    image: jetbrains/teamcity-server:2019.1.4
     user: "0"
     volumes:
       - teamcity_data:/data/teamcity_server/datadir
