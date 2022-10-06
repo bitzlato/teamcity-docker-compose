@@ -13,14 +13,13 @@ services:
 
   teamcity:
     image: jetbrains/teamcity-server:latest
-    command: "chown -R 1000:1000 /data/teamcity_server/datadir"
-    entrypoint: "/run-services.sh"
+    user: "0"
     container_name: teamcity-sa
     volumes:
       - ./volumes/:/data/teamcity_server/datadir
     restart: unless-stopped
-    expose:
-      - 8111
+    ports:
+      - 8111:8111
     networks:
       - teamcity
     labels:
@@ -53,7 +52,7 @@ services:
     environment:
       POSTGRES_USER: teamcity
       POSTGRES_PASSWORD: teamcity
-      POSTGRES_DB: postgres
+      POSTGRES_DB: teamcity
     restart: unless-stopped
     expose:
       - 5432
