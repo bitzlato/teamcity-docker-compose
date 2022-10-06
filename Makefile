@@ -7,4 +7,8 @@ update:
 start:
 	docker-compose start
 
+clean:
+	docker-compose down
+	docker volume prune
+
 all: start
