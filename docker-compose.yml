@@ -1,10 +1,5 @@
 version: '3.8'
 
-networks:
-  teamcity:
-    driver: bridge
-#    external: true
-
 volumes:
     teamcity_data:
     agent1_work:
@@ -25,8 +20,6 @@ x-agent: &agent
   restart: unless-stopped
   depends_on:
     - teamcity-server
-  networks:
-    - teamcity
   labels:
     org.label-schema.group: "ci"
 
@@ -42,8 +35,6 @@ services:
       - postgresql
     ports:
       - 8111:8111
-    networks:
-      - teamcity
     labels:
       org.label-schema.group: "ci"
 
@@ -93,5 +84,3 @@ services:
     restart: unless-stopped
     expose:
       - 5432
-    networks:
-      - teamcity
