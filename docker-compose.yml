@@ -19,7 +19,7 @@ x-agent-env: &agent-env
   SERVER_URL: http://teamcity-server:8111
 
 x-agent: &agent
-  image: jetbrains/teamcity-agent:latest
+  image: nexus.lgk.one:5000/teamcity-docker-agent:latest
   dns:
     - 8.8.8.8
   restart: unless-stopped
