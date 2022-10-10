@@ -15,6 +15,7 @@ x-agent-env: &agent-env
 
 x-agent: &agent
   image: nexus.lgk.one:5000/teamcity-docker-agent:latest
+  user: "0"
   dns:
     - 8.8.8.8
   restart: unless-stopped
