@@ -35,7 +35,7 @@ services:
     depends_on:
       - postgresql
     ports:
-      - 8111:8111
+      - 80:8111
     labels:
       org.label-schema.group: "ci"
 
