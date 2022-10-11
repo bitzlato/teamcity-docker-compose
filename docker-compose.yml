@@ -2,22 +2,18 @@ version: '3.8'
 
 volumes:
     teamcity_data:
-    agent1_work:
-    agent2_work:
-    agent3_work:
-    agent1_temp:
-    agent2_temp:
-    agent3_temp:
     docker_data:
 
-x-agent-env: &agent-env
-  SERVER_URL: http://teamcity-server:8111
+x-agent-env:
+  environment: &agent-env
+    DOCKER_IN_DOCKER: start
+    SERVER_URL: http://teamcity-server:8111
 
 x-agent: &agent
-  image: nexus.lgk.one:5000/teamcity-docker-agent:latest
-  user: "0"
-  dns:
-    - 8.8.8.8
+  image: teamcity-agent
+  build: 
+    dockerfile: agent.Dockerfile
+  privileged: true
   restart: unless-stopped
   depends_on:
     - teamcity-server
@@ -27,7 +23,6 @@ x-agent: &agent
 services:
   teamcity-server:
     image: jetbrains/teamcity-server:latest
-    user: "0"
     container_name: teamcity-server
     volumes:
       - teamcity_data:/data/teamcity_server/datadir
@@ -39,42 +34,27 @@ services:
     labels:
       org.label-schema.group: "ci"
 
-  teamcity-agent1:
+  agent1:
     <<: *agent
     environment:
       <<: *agent-env
       AGENT_NAME: agent-1
-    volumes:
-      - docker_data:/var/lib/docker
-      - /var/run/docker.sock:/var/run/docker.sock
-      - agent1_work:/opt/buildagent/work
-      - ./buildagent1/temp:/opt/buildagent/temp
 
-  teamcity-agent2:
+  agent2:
     <<: *agent
     environment:
       <<: *agent-env
       AGENT_NAME: agent-2
-    volumes:
-      - docker_data:/var/lib/docker
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./buildagent2/work:/opt/buildagent/work
-      - ./buildagent2/temp:/opt/buildagent/temp
 
-  teamcity-agent3:
+  agent3:
     <<: *agent
     environment:
       <<: *agent-env
       AGENT_NAME: agent-3
-    volumes:
-      - docker_data:/var/lib/docker
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./buildagent3/work:/opt/buildagent/work
-      - ./buildagent3/temp:/opt/buildagent/temp
 
   postgresql:
     image: postgres:latest
-    container_name: database
+    container_name: postgresql
     shm_size: 1g
     volumes:
       - ./pg_data:/var/lib/postgresql/data
